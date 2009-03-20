@@ -79,7 +79,10 @@ An identifier for this document
 
 =cut
 
-has 'public_id';
+has 'public_id' => (
+    is     => 'ro',
+    writer => '_set_public_id',
+);
 
 =item handler : HTML::SAX::Handler
 
