@@ -256,7 +256,8 @@ parse.
 use Smart::Comments;
 
 sub parse {
-    my ($self, $data, $public_id) = @_;
+    my $self = shift;
+    $self = __PACKAGE__->new(@_) if not blessed $self;
 
     $self->_get_handler->start_document($self, 'UTF-8');
 
