@@ -28,13 +28,13 @@ our $VERSION = '0.01';
 use Moose::Role;
 
 
-requires qw{
-    get_public_id
-    get_line_number
-    get_column_number
-    get_character_offset
-    get_raw_event_string
-};
+#requires qw{
+#    get_public_id
+#    get_line_number
+#    get_column_number
+#    get_character_offset
+#    get_raw_event_string
+#};
 
 
 1;

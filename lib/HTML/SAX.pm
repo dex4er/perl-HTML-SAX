@@ -69,6 +69,10 @@ use Moose;
 
 with 'HTML::SAX::Locator';
 
+
+use English '-no_match_vars';
+
+
 =head1 ATTRIBUTES
 
 =over
@@ -80,11 +84,13 @@ An identifier for this document
 =cut
 
 has 'public_id' => (
-    is     => 'ro',
-    writer => '_set_public_id',
+    isa     => 'Maybe[Str]',
+    reader  => '_get_public_id',
+    writer  => '_set_public_id',
+    default => undef,
 );
 
-=item handler : HTML::SAX::Handler
+=item _handler : HTML::SAX::Handler
 
 A class observing content events emited by this parser.
 
@@ -93,7 +99,8 @@ A class observing content events emited by this parser.
 has 'handler' => (
     is     => 'rw',
     does   => 'HTML::SAX::Handler',
-    writer => 'set_handler',
+    reader => '_get_handler',
+    writer => 'set_handler', ### TODO move to constructor
 );
 
 =item rawtext : Str
@@ -103,23 +110,64 @@ text document being parsed
 =cut
 
 has 'rawtext' => (
-    is  => 'ro',
-    isa => 'Str',
+    isa     => 'Str',
+    reader  => '_get_rawtext',
+    writer  => '_set_rawtext',
+    default => '',
 );
 
-=item position : Int
+=item _position : Int
 
 Current position in document relative to start (0)
 
 =cut
 
-has 'position' => (
-    is  => 'ro',
-    isa => 'Int',
+has '_position' => (
+    isa     => 'Int',
+    reader  => '_get_position',
+    writer  => '_set_position',
+    default => 0,
 );
 
-has 'char_start';
-has 'markup_start';
+=item _char_start : Int
+
+Current position of character
+
+=cut
+
+has '_char_start' => (
+    isa     => 'Int',
+    reader  => '_get_char_start',
+    writer  => '_set_char_start',
+    default => 0,
+);
+
+=item _markup_start : Int
+
+Start position in document
+
+=cut
+
+has '_markup_start' => (
+    isa     => 'Int',
+    reader  => '_get_markup_start',
+    writer  => '_set_markup_start',
+    default => 0,
+);
+
+=item _length : Int
+
+Length of the document in characters
+
+=cut
+
+has '_length' => (
+    isa     => 'Int',
+    lazy    => 1,
+    reader  => '_get_length',
+    default => sub { length($_[0]->_get_rawtext) },
+);
+
 
 =back
 
@@ -128,10 +176,6 @@ has 'markup_start';
 
 use namespace::clean -except => 'meta';
 
-
-## no critic (ProhibitBuiltinHomonyms)
-## no critic (RequireArgUnpacking)
-## no critic (RequireCheckingReturnValueOfEval)
 
 =head1 METHODS
 
@@ -143,8 +187,184 @@ use namespace::clean -except => 'meta';
 
 sub get_line_number {
     my ($self) = @_;
-    return 1 + (substr($self->rawtext, 0, $self->position) =~ tr/\n//);
+    return 1 + (substr($self->_get_rawtext, 0, $self->_get_position) =~ tr/\n//);
 };
+
+
+=item get_column_number() : Int
+
+Calculates the column number from the byte index
+
+=cut
+
+sub get_column_number {
+    # Not implemented yet.
+};
+
+
+=item get_character_offset() : Int
+
+Emit characters event
+
+=cut
+
+sub get_character_offset {
+    my ($self) = @_;
+    return $self->_get_position;
+};
+
+
+=item get_raw_event_string() : Str
+
+TODO
+
+=cut
+
+sub get_raw_event_string {
+    my ($self) = @_;
+    return substr($self->_get_rawtext, $self->_get_markup_start,
+                  $self->_get_position - $self->_get_markup_start);
+}
+
+
+=item emit_characters() : Int
+
+Emit characters event
+
+=cut
+
+sub emit_characters {
+    my ($self) = @_;
+    if ($self->_get_markup_start > $self->_get_char_start) {
+        $self->_get_handler->characters(
+            substr($self->_get_rawtext, $self->_get_char_start,
+                   $self->_get_markup_start - $self->_get_char_start)
+        );
+    }
+    $self->_set_char_start($self->_get_position);
+}
+
+
+=item parse(I<data> : Str, I<public_id> : Str = undef)
+
+Begins the parsing operation, setting up any decorators, depending on parse
+options invoking _parse() to execute parsing.  I<data> is a XML document to
+parse.
+
+=cut
+
+use Smart::Comments;
+
+sub parse {
+    my ($self, $data, $public_id) = @_;
+
+    $self->_get_handler->start_document($self, 'UTF-8');
+
+    my $name_start_char = ':_a-zA-Z\xC0-\xD6\xD8-\xF6\xF8-\x{2FF}\x{370}-\x{37D}\x{37F}-\x{1FFF}\x{200C}-\x{200D}\x{2070}-\x{218F}\x{2C00}-\x{2FEF}\x{3001}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFFD}';
+    my $name_char = $name_start_char . '-.0-9\x{b7}\x{0300}-\x{036f}\x{203f}-\x{2040}';
+
+    my $name_pattern = '[' . $name_start_char . '][' . $name_char . ']*';
+        
+    my $markup_start_pattern = qr/(<\/|<!|<[$name_start_char])/;
+    my $end_element_pattern = qr/\G($name_pattern)\s*>/;
+    my $start_element_pattern = qr/\G($name_pattern)(?=\s|>|\/>)/;
+    my $start_element_end_pattern = qr/\G\s*(\/)?>/;
+    my $attribute_pattern = qr/\G\s*($name_pattern)(\s*=\s*("|\'|)(.*?)\3){0,1}(?=\s|\/>|>)/s;
+    my $comment_pattern = qr/\G--(.*?)--\s*/s;
+    my $comment_decl_end_pattern = qr/\G>/;
+        
+    my $cdata_pattern = qr/\G\[CDATA\[(.*)\]\]\>/s;
+
+    my $rawtext = $self->_get_rawtext;
+
+    LOOP: {
+        do {
+            pos($rawtext) = $self->_get_position;
+            last unless $rawtext =~ /$markup_start_pattern/g;
+
+            $self->_set_markup_start($LAST_MATCH_START[0]);
+            $self->_set_position($LAST_MATCH_END[0]);
+
+            if ($1 eq '</') {
+
+                pos($rawtext) = $self->_get_position;
+                redo unless $rawtext =~ /$end_element_pattern/;
+
+                my $tag = $1;
+
+                $self->_set_position( $LAST_MATCH_END[0] );
+                $self->emit_characters;
+
+                $self->_get_handler->end_element($tag);
+
+            }
+            elsif ($1 eq '<!') {
+
+                pos($rawtext) = $self->_get_position;
+                my @comments = ();
+                while ($rawtext =~ /$comment_pattern/cg) {
+                    push @comments, $1;
+                };
+                if (@comments) {
+                    redo unless $rawtext =~ /$comment_decl_end_pattern/;
+                    $self->_set_position( $LAST_MATCH_END[0] );
+                    $self->emit_characters;
+                    $self->_get_handler->comment( @comments == 1 ? $comments[0] : \@comments );
+                    redo;
+                };
+                
+                pos($rawtext) = $self->_get_position;
+                if ($rawtext =~ /$cdata_pattern/) {
+                    my $cdata = $1;
+                    $self->_set_position( $LAST_MATCH_END[0] );
+                    $self->emit_characters;
+                    $self->_get_handler->cdata($cdata);
+                };
+
+            }
+            else {
+
+                $self->_set_position( $self->_get_position - 1 );
+                pos($rawtext) = $self->_get_position;
+                redo unless $rawtext =~ /$start_element_pattern/;
+
+                my $tag = $1;
+                my %attributes = ();
+                $self->_set_position( $LAST_MATCH_END[0] );
+
+                pos($rawtext) = $self->_get_position;
+                while ($rawtext =~ /$attribute_pattern/gc) {
+                    my ($name, $value) = ($1, $4);
+                    $attributes{$name} = $value; 
+#                    $self->_set_position( $LAST_MATCH_END[0] );
+                };
+
+#                pos($rawtext) = $self->_get_position;
+                redo unless $rawtext =~ /$start_element_end_pattern/g;
+
+                $self->_set_position( $LAST_MATCH_END[0] );
+                $self->emit_characters;
+                if (defined $1) {
+                    $self->_get_handler->empty_element($tag, \%attributes);
+                } else {
+                    $self->_get_handler->start_element($tag, \%attributes);
+                };
+
+                # see http://www.w3.org/TR/REC-html40/appendix/notes.html#notes-specifying-data
+                # for special handling issues with script and style tags
+            };
+
+        } while ($self->_get_position < $self->_get_length);
+    }; # LOOP
+
+    # emit any extra characters left on the end
+    if ($self->_get_char_start < $self->_get_length) {
+            $self->_get_handler->characters(substr($rawtext, $self->_get_char_start));
+    };
+
+    $self->_get_handler->end_document;
+};
+
 
 =back
 
