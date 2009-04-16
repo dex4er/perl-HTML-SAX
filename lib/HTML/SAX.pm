@@ -15,7 +15,7 @@ HTML::SAX - HTML/XHTML parser that outputs SAX events
 This class is designed primarily to parse HTML fragments.  Intended usage
 scenarios include:
 
-=over
+=over 2
 
 =item *
 
@@ -403,7 +403,7 @@ Piotr Roszatycki <dexter@cpan.org>
 
 Copyright (c) 2006 Jeff Moore
 
-Copyright (c) 2008, 2009 Piotr Roszatycki E<lt>dexter@cpan.orgE<gt>.
+Copyright (c) 2008, 2009 Piotr Roszatycki <dexter@cpan.org>.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

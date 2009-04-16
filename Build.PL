@@ -13,7 +13,7 @@ my $module = 'HTML::SAX';
 
 my $build = Module::Build->new(
     module_name => $module,
-    license => 'perl',
+    license => 'mit',
     requires => {
         'perl'               => 5.006,
         'Moose'              => 0.56,
@@ -24,6 +24,7 @@ my $build = Module::Build->new(
         'parent'             => 0,
         'Test::Unit::Lite'   => 0.12,
         'Test::Assert'       => 0,
+        'Test::Mock::Class'  => 0,
     },
     create_makefile_pl => 'traditional',
     create_readme => 1,
