@@ -30,13 +30,11 @@ BEGIN {
 
     has level => ( is => 'rw', isa => 'Num', default => 0 );
 
-    use Smart::Comments;
-
     sub empty_element {
         my ($self, $tag, %attrs) = @_;
-        if ($tag !~ /^(a|abbr|acronym|address|b|br|i|img|span|strong|sup)$/) {
+        if ($tag !~ /^(a|abbr|acronym|address|b|br|code|em|i|img|li|span|strong|sup)$/) {
             printf "\n%s", ' ' x ($self->level * 2);
-        };  
+        };
         printf "<%s%s />",
             $tag,
             join('', map { sprintf " %s='%s'", $_, $attrs{$_} } keys %attrs);
@@ -44,13 +42,13 @@ BEGIN {
 
     sub start_element {
         my ($self, $tag, %attrs) = @_;
-        if ($tag !~ /^(a|abbr|acronym|address|b|br|i|img|span|strong|sup)$/) {
+        if ($tag !~ /^(a|abbr|acronym|address|b|br|code|em|i|img|li|span|strong|sup)$/) {
             printf "\n%s", ' ' x ($self->level * 2);
-        };  
+        };
         printf "<%s%s>",
             $tag,
             join('', map { sprintf " %s='%s'", $_, $attrs{$_} } keys %attrs);
-        $self->level( $self->level + 1 ); 
+        $self->level( $self->level + 1 );
     };
 
     sub end_element {
@@ -58,7 +56,7 @@ BEGIN {
         $self->level( $self->level - 1 );
         if ($tag =~ /^(body|div|form|head|html|table|td|tr|ul)$/) {
             printf "\n%s", ' ' x ($self->level * 2);
-        };  
+        };
         printf "</%s>", $tag;
     };
 
@@ -66,12 +64,12 @@ BEGIN {
         my ($self, $data) = @_;
         $data =~ s/^\s+/ /;
         $data =~ s/\s+$/ /;
-        print $data;  
+        print $data;
     };
-    
+
     sub cdata {
         my ($self, $data) = @_;
-        printf "<![CDATA[%s]]>", $data;  
+        printf "<![CDATA[%s]]>", $data;
     };
 
     sub comment {

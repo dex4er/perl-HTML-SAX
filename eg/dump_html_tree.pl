@@ -6,6 +6,7 @@ use warnings;
 use lib 'lib', '../lib';
 
 use HTML::SAX;
+use YAML;
 
 my $fh;
 
@@ -22,18 +23,17 @@ my $data = do { local $/; <$fh> };
 my $handler = My::Handler->new;
 my $parser = HTML::SAX->new( rawtext => $data, handler => $handler )->parse;
 
+print Dump($handler->data);
+
 
 BEGIN {
     package My::Handler;
     use Moose;
     with 'HTML::SAX::Handler';
 
-    BEGIN {
-        eval { require YAML::Syck; YAML::Syck->import; 1 }
-        or eval { require YAML; YAML->import; 1 };
-    };
+    use YAML::Tiny;
 
-    my @tree = ();
+    has 'data' => ( is => 'rw', default => sub { [] } );
 
     foreach my $method (qw{
         start_element
@@ -41,7 +41,7 @@ BEGIN {
     }) {
         __PACKAGE__->meta->add_method($method => sub {
             my ($self, $tag, %attrs) = @_;
-            push @tree, { $method => { $tag => { %attrs } } };
+            push @{ $self->data }, { $method => { $tag => { %attrs } } };
         });
     };
 
@@ -51,10 +51,8 @@ BEGIN {
         cdata
     }) {
         __PACKAGE__->meta->add_method($method => sub {
-            my ($self, $data) = @_;
-            $data =~ s/^\s*(.*)\s*$/$1/;
-            return if $data eq '';
-            push @tree, { $method => $data };
+        my ($self, $data) = @_;
+            push @{ $self->data }, { $method => $data };
         });
     };
 
@@ -63,12 +61,7 @@ BEGIN {
     }) {
         __PACKAGE__->meta->add_method($method => sub {
             my ($self, @data) = @_;
-            push @tree, { $method => [ @data ] };
+            push @{ $self->data }, { $method => [ @data ] };
         });
     };
-
-    sub end_document {
-        print Dump \@tree;  
-    };
-
 };

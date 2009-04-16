@@ -1,0 +1,816 @@
+---
+- characters: |
+    <?xml version="1.0" ?>
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+- start_element:
+    html:
+      xmlns: http://www.w3.org/1999/xhtml
+- characters: "\n"
+- start_element:
+    head: {}
+- characters: "\n"
+- start_element:
+    title: {}
+- characters: 'HTML::SAX - HTML/XHTML parser that outputs SAX events'
+- end_element: title
+- characters: "\n"
+- empty_element:
+    meta:
+      content: text/html; charset=utf-8
+      http-equiv: content-type
+- characters: "\n"
+- empty_element:
+    link:
+      href: mailto:root@localhost
+      rev: made
+- characters: "\n"
+- end_element: head
+- characters: "\n\n"
+- start_element:
+    body:
+      style: 'background-color: white'
+- characters: "\n\n\n"
+- comment:
+    - ' INDEX BEGIN '
+- characters: "\n"
+- start_element:
+    div:
+      name: index
+- characters: "\n"
+- start_element:
+    p: {}
+- start_element:
+    a:
+      name: __index__
+- end_element: a
+- end_element: p
+- characters: "\n\n"
+- start_element:
+    ul: {}
+- characters: "\n\n\t"
+- start_element:
+    li: {}
+- start_element:
+    a:
+      href: '#name'
+- characters: NAME
+- end_element: a
+- end_element: li
+- characters: "\n\t"
+- start_element:
+    li: {}
+- start_element:
+    a:
+      href: '#synopsis'
+- characters: SYNOPSIS
+- end_element: a
+- end_element: li
+- characters: "\n\t"
+- start_element:
+    li: {}
+- start_element:
+    a:
+      href: '#description'
+- characters: DESCRIPTION
+- end_element: a
+- end_element: li
+- characters: "\n\t"
+- start_element:
+    li: {}
+- start_element:
+    a:
+      href: '#attributes'
+- characters: ATTRIBUTES
+- end_element: a
+- end_element: li
+- characters: "\n\t"
+- start_element:
+    li: {}
+- start_element:
+    a:
+      href: '#methods'
+- characters: METHODS
+- end_element: a
+- end_element: li
+- characters: "\n\t"
+- start_element:
+    li: {}
+- start_element:
+    a:
+      href: '#see_also'
+- characters: SEE ALSO
+- end_element: a
+- end_element: li
+- characters: "\n\t"
+- start_element:
+    li: {}
+- start_element:
+    a:
+      href: '#bugs'
+- characters: BUGS
+- end_element: a
+- end_element: li
+- characters: "\n\t"
+- start_element:
+    li: {}
+- start_element:
+    a:
+      href: '#author'
+- characters: AUTHOR
+- end_element: a
+- end_element: li
+- characters: "\n\t"
+- start_element:
+    li: {}
+- start_element:
+    a:
+      href: '#license'
+- characters: LICENSE
+- end_element: a
+- end_element: li
+- characters: "\n"
+- end_element: ul
+- characters: "\n\n"
+- empty_element:
+    hr:
+      name: index
+- characters: "\n"
+- end_element: div
+- characters: "\n"
+- comment:
+    - ' INDEX END '
+- characters: "\n\n"
+- start_element:
+    p: {}
+- characters: "\n"
+- end_element: p
+- characters: "\n"
+- start_element:
+    h1: {}
+- start_element:
+    a:
+      name: name
+- characters: NAME
+- end_element: a
+- end_element: h1
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: 'HTML::SAX - HTML/XHTML parser that outputs SAX events'
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: "\n"
+- end_element: p
+- characters: "\n"
+- empty_element:
+    hr: {}
+- characters: "\n"
+- start_element:
+    h1: {}
+- start_element:
+    a:
+      name: synopsis
+- characters: SYNOPSIS
+- end_element: a
+- end_element: h1
+- characters: "\n"
+- start_element:
+    pre: {}
+- characters: "\n  use HTML::SAX;"
+- end_element: pre
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: "\n"
+- end_element: p
+- characters: "\n"
+- empty_element:
+    hr: {}
+- characters: "\n"
+- start_element:
+    h1: {}
+- start_element:
+    a:
+      name: description
+- characters: DESCRIPTION
+- end_element: a
+- end_element: h1
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: |-
+    This class is designed primarily to parse HTML fragments.  Intended usage
+    scenarios include:
+- end_element: p
+- characters: "\n"
+- start_element:
+    ul: {}
+- characters: "\n"
+- start_element:
+    li: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: A basis for santizing HTML strings
+- end_element: p
+- characters: "\n"
+- end_element: li
+- characters: "\n"
+- start_element:
+    li: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: Recognizing XML style markup embedded in text documents
+- end_element: p
+- characters: "\n"
+- end_element: li
+- characters: "\n"
+- start_element:
+    li: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: Implementing HTML-like markup languages
+- end_element: p
+- characters: "\n"
+- end_element: li
+- characters: "\n"
+- end_element: ul
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: |-
+    This class emits events in a custom SAX API that is designed to represent HTML
+    documents as well as XML documents.  However, this class should be geared
+    primarly to HTML markup.
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: |-
+    As a general strategy, markup events are emitted only for valid markup,
+    although sequence of events may not constitute a well-formed document.
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: |-
+    There is no current definition of what is valid HTML markup and what is not.
+    (The HTML 4.0.1 spec claims a relationship to the SGML specification which is
+    not helpful for this application.)  The WHAT working group 
+    (http://whatwg.org/) is working on such a specification and this parser 
+    should track the parsing recommendations of that group as much as possible.
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: |-
+    If potential markup is encountered that the parser does not understand, it is
+    passed through in the form of character data.
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: |-
+    Entities are not parsed and instead passed through unaltered.  Character data
+    and attribute values may contain the &lt;, &amp;, and &gt; characters.  Minimized
+    boolean attributes are allowed.  Attribute values without quotation marks are
+    allowed.  Comments are parsed SGML style
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: The text string to be parsed must be UTF-8.
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: "\n"
+- end_element: p
+- characters: "\n"
+- empty_element:
+    hr: {}
+- characters: "\n"
+- start_element:
+    h1: {}
+- start_element:
+    a:
+      name: attributes
+- characters: ATTRIBUTES
+- end_element: a
+- end_element: h1
+- characters: "\n"
+- start_element:
+    dl: {}
+- characters: "\n"
+- start_element:
+    dt: {}
+- start_element:
+    strong: {}
+- start_element:
+    a:
+      class: item
+      name: public_id
+- characters: public_id
+- end_element: a
+- end_element: strong
+- end_element: dt
+- characters: "\n\n"
+- start_element:
+    dd: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: An identifier for this document
+- end_element: p
+- characters: "\n"
+- end_element: dd
+- characters: "\n"
+- start_element:
+    dt: {}
+- start_element:
+    strong: {}
+- start_element:
+    a:
+      class: item
+      name: handler_html_sax_handler
+- characters: '_handler : HTML::SAX::Handler'
+- end_element: a
+- end_element: strong
+- end_element: dt
+- characters: "\n\n"
+- start_element:
+    dd: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: A class observing content events emited by this parser.
+- end_element: p
+- characters: "\n"
+- end_element: dd
+- characters: "\n"
+- start_element:
+    dt: {}
+- start_element:
+    strong: {}
+- start_element:
+    a:
+      class: item
+      name: rawtext_str
+- characters: 'rawtext : Str'
+- end_element: a
+- end_element: strong
+- end_element: dt
+- characters: "\n\n"
+- start_element:
+    dd: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: text document being parsed
+- end_element: p
+- characters: "\n"
+- end_element: dd
+- characters: "\n"
+- start_element:
+    dt: {}
+- start_element:
+    strong: {}
+- start_element:
+    a:
+      class: item
+      name: position_int
+- characters: '_position : Int'
+- end_element: a
+- end_element: strong
+- end_element: dt
+- characters: "\n\n"
+- start_element:
+    dd: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: Current position in document relative to start (0)
+- end_element: p
+- characters: "\n"
+- end_element: dd
+- characters: "\n"
+- start_element:
+    dt: {}
+- start_element:
+    strong: {}
+- start_element:
+    a:
+      class: item
+      name: char_start_int
+- characters: '_char_start : Int'
+- end_element: a
+- end_element: strong
+- end_element: dt
+- characters: "\n\n"
+- start_element:
+    dd: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: Current position of character
+- end_element: p
+- characters: "\n"
+- end_element: dd
+- characters: "\n"
+- start_element:
+    dt: {}
+- start_element:
+    strong: {}
+- start_element:
+    a:
+      class: item
+      name: markup_start_int
+- characters: '_markup_start : Int'
+- end_element: a
+- end_element: strong
+- end_element: dt
+- characters: "\n\n"
+- start_element:
+    dd: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: Start position in document
+- end_element: p
+- characters: "\n"
+- end_element: dd
+- characters: "\n"
+- start_element:
+    dt: {}
+- start_element:
+    strong: {}
+- start_element:
+    a:
+      class: item
+      name: length_int
+- characters: '_length : Int'
+- end_element: a
+- end_element: strong
+- end_element: dt
+- characters: "\n\n"
+- start_element:
+    dd: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: Length of the document in characters
+- end_element: p
+- characters: "\n"
+- end_element: dd
+- characters: "\n"
+- end_element: dl
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: "\n"
+- end_element: p
+- characters: "\n"
+- empty_element:
+    hr: {}
+- characters: "\n"
+- start_element:
+    h1: {}
+- start_element:
+    a:
+      name: methods
+- characters: METHODS
+- end_element: a
+- end_element: h1
+- characters: "\n"
+- start_element:
+    dl: {}
+- characters: "\n"
+- start_element:
+    dt: {}
+- start_element:
+    strong: {}
+- start_element:
+    a:
+      class: item
+      name: get_line_number
+- start_element:
+    code: {}
+- characters: get_line_number()
+- end_element: code
+- characters: ' : Int'
+- end_element: a
+- end_element: strong
+- end_element: dt
+- characters: "\n\n"
+- start_element:
+    dt: {}
+- start_element:
+    strong: {}
+- start_element:
+    a:
+      class: item
+      name: get_column_number
+- start_element:
+    code: {}
+- characters: get_column_number()
+- end_element: code
+- characters: ' : Int'
+- end_element: a
+- end_element: strong
+- end_element: dt
+- characters: "\n\n"
+- start_element:
+    dd: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: Calculates the column number from the byte index
+- end_element: p
+- characters: "\n"
+- end_element: dd
+- characters: "\n"
+- start_element:
+    dt: {}
+- start_element:
+    strong: {}
+- start_element:
+    a:
+      class: item
+      name: get_character_offset
+- start_element:
+    code: {}
+- characters: get_character_offset()
+- end_element: code
+- characters: ' : Int'
+- end_element: a
+- end_element: strong
+- end_element: dt
+- characters: "\n\n"
+- start_element:
+    dd: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: Emit characters event
+- end_element: p
+- characters: "\n"
+- end_element: dd
+- characters: "\n"
+- start_element:
+    dt: {}
+- start_element:
+    strong: {}
+- start_element:
+    a:
+      class: item
+      name: get_raw_event_string
+- start_element:
+    code: {}
+- characters: get_raw_event_string()
+- end_element: code
+- characters: ' : Str'
+- end_element: a
+- end_element: strong
+- end_element: dt
+- characters: "\n\n"
+- start_element:
+    dd: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: TODO
+- end_element: p
+- characters: "\n"
+- end_element: dd
+- characters: "\n"
+- start_element:
+    dt: {}
+- start_element:
+    strong: {}
+- start_element:
+    a:
+      class: item
+      name: emit_characters
+- start_element:
+    code: {}
+- characters: emit_characters()
+- end_element: code
+- characters: ' : Int'
+- end_element: a
+- end_element: strong
+- end_element: dt
+- characters: "\n\n"
+- start_element:
+    dd: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: Emit characters event
+- end_element: p
+- characters: "\n"
+- end_element: dd
+- characters: "\n"
+- start_element:
+    dt: {}
+- start_element:
+    strong: {}
+- start_element:
+    a:
+      class: item
+      name: parse
+- characters: parse(
+- start_element:
+    em: {}
+- characters: data
+- end_element: em
+- characters: ' : Str, '
+- start_element:
+    em: {}
+- characters: public_id
+- end_element: em
+- characters: ' : Str = undef)'
+- end_element: a
+- end_element: strong
+- end_element: dt
+- characters: "\n\n"
+- start_element:
+    dd: {}
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: |-
+    Begins the parsing operation, setting up any decorators, depending on parse
+    options invoking 
+- start_element:
+    code: {}
+- characters: _parse()
+- end_element: code
+- characters: ' to execute parsing.  '
+- start_element:
+    em: {}
+- characters: data
+- end_element: em
+- characters: " is a XML document to\nparse."
+- end_element: p
+- characters: "\n"
+- end_element: dd
+- characters: "\n"
+- end_element: dl
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: "\n"
+- end_element: p
+- characters: "\n"
+- empty_element:
+    hr: {}
+- characters: "\n"
+- start_element:
+    h1: {}
+- start_element:
+    a:
+      name: see_also
+- characters: SEE ALSO
+- end_element: a
+- end_element: h1
+- characters: "\n"
+- start_element:
+    p: {}
+- start_element:
+    em: {}
+- characters: Moose
+- end_element: em
+- characters: .
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: "\n"
+- end_element: p
+- characters: "\n"
+- empty_element:
+    hr: {}
+- characters: "\n"
+- start_element:
+    h1: {}
+- start_element:
+    a:
+      name: bugs
+- characters: BUGS
+- end_element: a
+- end_element: h1
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: The API is not stable yet and can be changed in future.
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: "\n"
+- end_element: p
+- characters: "\n"
+- empty_element:
+    hr: {}
+- characters: "\n"
+- start_element:
+    h1: {}
+- start_element:
+    a:
+      name: author
+- characters: AUTHOR
+- end_element: a
+- end_element: h1
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: Piotr Roszatycki &lt;
+- start_element:
+    a:
+      href: mailto:dexter@cpan.org
+- characters: dexter@cpan.org
+- end_element: a
+- characters: '&gt;'
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: "\n"
+- end_element: p
+- characters: "\n"
+- empty_element:
+    hr: {}
+- characters: "\n"
+- start_element:
+    h1: {}
+- start_element:
+    a:
+      name: license
+- characters: LICENSE
+- end_element: a
+- end_element: h1
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: Copyright (c) 2006 Jeff Moore
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: 'Copyright (c) 2008, 2009 Piotr Roszatycki &lt;'
+- start_element:
+    a:
+      href: mailto:dexter@cpan.org
+- characters: dexter@cpan.org
+- end_element: a
+- characters: '&gt;.'
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: |-
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the &quot;Software&quot;), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: |-
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: |-
+    THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+    THE SOFTWARE.
+- end_element: p
+- characters: "\n"
+- start_element:
+    p: {}
+- characters: 'See '
+- start_element:
+    a:
+      href: http://opensource.org/licenses/mit-license.php
+- characters: http://opensource.org/licenses/mit-license.php
+- end_element: a
+- end_element: p
+- characters: "\n\n"
+- end_element: body
+- characters: "\n\n"
+- end_element: html
+- characters: "\n"

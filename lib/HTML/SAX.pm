@@ -40,8 +40,8 @@ although sequence of events may not constitute a well-formed document.
 
 There is no current definition of what is valid HTML markup and what is not.
 (The HTML 4.0.1 spec claims a relationship to the SGML specification which is
-not helpful for this application.)  The WHAT working group 
-(http://whatwg.org/) is working on such a specification and this parser 
+not helpful for this application.)  The WHAT working group
+(http://whatwg.org/) is working on such a specification and this parser
 should track the parsing recommendations of that group as much as possible.
 
 If potential markup is encountered that the parser does not understand, it is
@@ -265,7 +265,7 @@ sub parse {
     my $name_char = $name_start_char . '-.0-9\x{b7}\x{0300}-\x{036f}\x{203f}-\x{2040}';
 
     my $name_pattern = '[' . $name_start_char . '][' . $name_char . ']*';
-        
+
     my $markup_start_pattern = qr/(<\/|<!|<[$name_start_char])/;
     my $end_element_pattern = qr/\G($name_pattern)\s*>/;
     my $start_element_pattern = qr/\G($name_pattern)(?=\s|>|\/>)/;
@@ -273,7 +273,7 @@ sub parse {
     my $attribute_pattern = qr/\G\s*($name_pattern)(\s*=\s*("|\'|)(.*?)\3){0,1}(?=\s|\/>|>)/s;
     my $comment_pattern = qr/\G--(.*?)--\s*/s;
     my $comment_decl_end_pattern = qr/\G>/;
-        
+
     my $cdata_pattern = qr/\G\[CDATA\[(.*)\]\]\>/s;
 
     my $rawtext = $self->_get_rawtext;
@@ -313,7 +313,7 @@ sub parse {
                     $self->_get_handler->comment(@comments);
                     redo;
                 };
-                
+
                 pos($rawtext) = $self->_get_position;
                 if ($rawtext =~ /$cdata_pattern/) {
                     my $cdata = $1;
@@ -336,7 +336,7 @@ sub parse {
                 pos($rawtext) = $self->_get_position;
                 while ($rawtext =~ /$attribute_pattern/gc) {
                     my ($name, $value) = ($1, $4);
-                    $attributes{$name} = $value; 
+                    $attributes{$name} = $value;
 #                    $self->_set_position( $LAST_MATCH_END[0] );
                 };
 

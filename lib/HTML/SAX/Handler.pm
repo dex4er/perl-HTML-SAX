@@ -19,7 +19,7 @@ HTML::SAX::Handler - Interface for HTML::SAX handler
   sub empty_element { ... };
   sub cdata { ... };
   sub comment { ... };
-  
+
   package main;
   my $handler = My::Handler->new;
   HTML::SAX->parse( rawtext => '<html></html>', handler => $handler );

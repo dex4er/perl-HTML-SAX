@@ -1,0 +1,194 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>HTML::SAX - HTML/XHTML parser that outputs SAX events</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#attributes">ATTRIBUTES</a></li>
+	<li><a href="#methods">METHODS</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#license">LICENSE</a></li>
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>HTML::SAX - HTML/XHTML parser that outputs SAX events</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use HTML::SAX;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This class is designed primarily to parse HTML fragments.  Intended usage
+scenarios include:</p>
+<ul>
+<li>
+<p>A basis for santizing HTML strings</p>
+</li>
+<li>
+<p>Recognizing XML style markup embedded in text documents</p>
+</li>
+<li>
+<p>Implementing HTML-like markup languages</p>
+</li>
+</ul>
+<p>This class emits events in a custom SAX API that is designed to represent HTML
+documents as well as XML documents.  However, this class should be geared
+primarly to HTML markup.</p>
+<p>As a general strategy, markup events are emitted only for valid markup,
+although sequence of events may not constitute a well-formed document.</p>
+<p>There is no current definition of what is valid HTML markup and what is not.
+(The HTML 4.0.1 spec claims a relationship to the SGML specification which is
+not helpful for this application.)  The WHAT working group 
+(http://whatwg.org/) is working on such a specification and this parser 
+should track the parsing recommendations of that group as much as possible.</p>
+<p>If potential markup is encountered that the parser does not understand, it is
+passed through in the form of character data.</p>
+<p>Entities are not parsed and instead passed through unaltered.  Character data
+and attribute values may contain the &lt;, &amp;, and &gt; characters.  Minimized
+boolean attributes are allowed.  Attribute values without quotation marks are
+allowed.  Comments are parsed SGML style</p>
+<p>The text string to be parsed must be UTF-8.</p>
+<p>
+</p>
+<hr />
+<h1><a name="attributes">ATTRIBUTES</a></h1>
+<dl>
+<dt><strong><a name="public_id" class="item">public_id</a></strong></dt>
+
+<dd>
+<p>An identifier for this document</p>
+</dd>
+<dt><strong><a name="handler_html_sax_handler" class="item">_handler : HTML::SAX::Handler</a></strong></dt>
+
+<dd>
+<p>A class observing content events emited by this parser.</p>
+</dd>
+<dt><strong><a name="rawtext_str" class="item">rawtext : Str</a></strong></dt>
+
+<dd>
+<p>text document being parsed</p>
+</dd>
+<dt><strong><a name="position_int" class="item">_position : Int</a></strong></dt>
+
+<dd>
+<p>Current position in document relative to start (0)</p>
+</dd>
+<dt><strong><a name="char_start_int" class="item">_char_start : Int</a></strong></dt>
+
+<dd>
+<p>Current position of character</p>
+</dd>
+<dt><strong><a name="markup_start_int" class="item">_markup_start : Int</a></strong></dt>
+
+<dd>
+<p>Start position in document</p>
+</dd>
+<dt><strong><a name="length_int" class="item">_length : Int</a></strong></dt>
+
+<dd>
+<p>Length of the document in characters</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="methods">METHODS</a></h1>
+<dl>
+<dt><strong><a name="get_line_number" class="item"><code>get_line_number()</code> : Int</a></strong></dt>
+
+<dt><strong><a name="get_column_number" class="item"><code>get_column_number()</code> : Int</a></strong></dt>
+
+<dd>
+<p>Calculates the column number from the byte index</p>
+</dd>
+<dt><strong><a name="get_character_offset" class="item"><code>get_character_offset()</code> : Int</a></strong></dt>
+
+<dd>
+<p>Emit characters event</p>
+</dd>
+<dt><strong><a name="get_raw_event_string" class="item"><code>get_raw_event_string()</code> : Str</a></strong></dt>
+
+<dd>
+<p>TODO</p>
+</dd>
+<dt><strong><a name="emit_characters" class="item"><code>emit_characters()</code> : Int</a></strong></dt>
+
+<dd>
+<p>Emit characters event</p>
+</dd>
+<dt><strong><a name="parse" class="item">parse(<em>data</em> : Str, <em>public_id</em> : Str = undef)</a></strong></dt>
+
+<dd>
+<p>Begins the parsing operation, setting up any decorators, depending on parse
+options invoking <code>_parse()</code> to execute parsing.  <em>data</em> is a XML document to
+parse.</p>
+</dd>
+</dl>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><em>Moose</em>.</p>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>The API is not stable yet and can be changed in future.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Piotr Roszatycki &lt;<a href="mailto:dexter@cpan.org">dexter@cpan.org</a>&gt;</p>
+<p>
+</p>
+<hr />
+<h1><a name="license">LICENSE</a></h1>
+<p>Copyright (c) 2006 Jeff Moore</p>
+<p>Copyright (c) 2008, 2009 Piotr Roszatycki &lt;<a href="mailto:dexter@cpan.org">dexter@cpan.org</a>&gt;.</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the &quot;Software&quot;), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+<p>See <a href="http://opensource.org/licenses/mit-license.php">http://opensource.org/licenses/mit-license.php</a></p>
+
+</body>
+
+</html>
