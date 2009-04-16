@@ -7,9 +7,16 @@ use lib 'lib', '../lib';
 
 use HTML::SAX;
 
-my $file = $ARGV[0] || die "Usage: $0 *file*\n";
+my $fh;
 
-open my $fh, '<', $file or die $!;
+if ($ARGV[0]) {
+    my $file = $ARGV[0];
+    open $fh, '<', $file or die $!;
+}
+else {
+    $fh = \*STDIN;
+}
+
 my $data = do { local $/; <$fh> };
 
 my $handler = My::Handler->new;
@@ -29,16 +36,34 @@ BEGIN {
     my @tree = ();
 
     foreach my $method (qw{
-        characters
         start_element
-        end_element
         empty_element
+    }) {
+        __PACKAGE__->meta->add_method($method => sub {
+            my ($self, $tag, %attrs) = @_;
+            push @tree, { $method => { $tag => { %attrs } } };
+        });
+    };
+
+    foreach my $method (qw{
+        characters
+        end_element
         cdata
+    }) {
+        __PACKAGE__->meta->add_method($method => sub {
+            my ($self, $data) = @_;
+            $data =~ s/^\s*(.*)\s*$/$1/;
+            return if $data eq '';
+            push @tree, { $method => $data };
+        });
+    };
+
+    foreach my $method (qw{
         comment
     }) {
         __PACKAGE__->meta->add_method($method => sub {
-            shift;
-            push @tree, { $method => \@_ };
+            my ($self, @data) = @_;
+            push @tree, { $method => [ @data ] };
         });
     };
 

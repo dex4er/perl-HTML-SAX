@@ -310,7 +310,7 @@ sub parse {
                     redo unless $rawtext =~ /$comment_decl_end_pattern/;
                     $self->_set_position( $LAST_MATCH_END[0] );
                     $self->emit_characters;
-                    $self->_get_handler->comment( @comments == 1 ? $comments[0] : \@comments );
+                    $self->_get_handler->comment(@comments);
                     redo;
                 };
                 
@@ -346,9 +346,9 @@ sub parse {
                 $self->_set_position( $LAST_MATCH_END[0] );
                 $self->emit_characters;
                 if (defined $1) {
-                    $self->_get_handler->empty_element($tag, \%attributes);
+                    $self->_get_handler->empty_element($tag, %attributes);
                 } else {
-                    $self->_get_handler->start_element($tag, \%attributes);
+                    $self->_get_handler->start_element($tag, %attributes);
                 };
 
                 # see http://www.w3.org/TR/REC-html40/appendix/notes.html#notes-specifying-data
