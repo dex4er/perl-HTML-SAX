@@ -105,7 +105,7 @@ sub end_document {
     my ($self) = @_;
     my $data = $self->data;
     $data .= "\n";
-    $self->data($data);  
+    $self->data($data);
 };
 
 1;

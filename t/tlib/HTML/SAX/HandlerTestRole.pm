@@ -7,20 +7,26 @@ use Test::Mock::Class ':all';
 
 use HTML::SAX;
 
-has 'metamock' => ( is => 'rw', clearer => 'clear_metamock' );
-has 'handler'  => ( is => 'rw', clearer => 'clear_handler' );
+has 'metamock' => (
+    is      => 'rw',
+    isa     => 'Test::Mock::Class',
+    clearer => 'clear_metamock'
+);
 
-# Sources of test case material:
-#
-# http://www.w3.org/XML/Test/
-# http://www.hixie.ch/tests/adhoc/html/parsing/
-# http://www.w3.org/MarkUp/SGML/sgml-lex/sgml-lex
+has 'handler' => (
+    is      => 'rw',
+    does    => 'HTML::SAX::Handler',
+    clearer => 'clear_handler'
+);
 
 around 'set_up' => sub {
     my ($next, $self) = @_;
 
-    $self->metamock( Test::Mock::Class->create_mock_anon_class );
-    $self->metamock->add_role('HTML::SAX::Handler');
+    $self->metamock(
+        Test::Mock::Class->create_mock_anon_class(
+            roles => [ 'HTML::SAX::Handler' ],
+        )
+    );
     $self->handler( $self->metamock->new_object );
 
     return $self->$next();
@@ -29,7 +35,7 @@ around 'set_up' => sub {
 around 'tear_down' => sub {
     my ($next, $self) = @_;
 
-    $self->handler->tally;
+    $self->handler->mock_tally;
 
     $self->clear_handler;
     $self->clear_metamock;

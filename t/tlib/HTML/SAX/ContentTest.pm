@@ -13,11 +13,11 @@ use HTML::SAX;
 sub test_empty {
     my ($self) = @_;
     $self->handler->mock_expect_never('characters');
-    $self->handler->mock_expect_never('startElement');
-    $self->handler->mock_expect_never('endElement');
+    $self->handler->mock_expect_never('start_element');
+    $self->handler->mock_expect_never('end_element');
     my $parser = HTML::SAX->new( handler => $self->handler, rawtext => '' );
     assert_isa('HTML::SAX', $parser);
-    $parser->parse;  
+    $parser->parse;
 };
 
 1;
