@@ -32,7 +32,7 @@ BEGIN {
 
     sub empty_element {
         my ($self, $tag, %attrs) = @_;
-        if ($tag !~ /^(a|abbr|acronym|address|b|br|code|em|i|img|li|span|strong|sup)$/) {
+        if ($tag !~ /^(a|abbr|acronym|address|b|br|code|em|i|img|span|strong|sup)$/) {
             printf "\n%s", ' ' x ($self->level * 2);
         };
         printf "<%s%s />",
@@ -42,7 +42,7 @@ BEGIN {
 
     sub start_element {
         my ($self, $tag, %attrs) = @_;
-        if ($tag !~ /^(a|abbr|acronym|address|b|br|code|em|i|img|li|span|strong|sup)$/) {
+        if ($tag !~ /^(a|abbr|acronym|address|b|br|code|em|i|img|span|strong|sup)$/) {
             printf "\n%s", ' ' x ($self->level * 2);
         };
         printf "<%s%s>",
@@ -54,7 +54,7 @@ BEGIN {
     sub end_element {
         my ($self, $tag) = @_;
         $self->level( $self->level - 1 );
-        if ($tag =~ /^(body|div|form|head|html|table|td|tr|ul)$/) {
+        if ($tag =~ /^(body|div|form|head|html|table|tr|ul)$/) {
             printf "\n%s", ' ' x ($self->level * 2);
         };
         printf "</%s>", $tag;
@@ -78,4 +78,8 @@ BEGIN {
         printf "<!--%s-->", join(' -- ', @data);
     };
 
+    sub end_document {
+        my ($self) = @_;
+        printf "\n";  
+    };
 };

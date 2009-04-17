@@ -5,8 +5,9 @@ use Test::Unit::Lite;
 use Moose;
 extends 'Test::Unit::TestCase';
 
+use Text::Diff;
 use Test::Assert ':all';
-use YAML::Tiny;
+use YAML 'Dump', 'LoadFile';
 
 use HTML::SAX;
 
@@ -19,14 +20,19 @@ sub test_dump_html_tree {
     };
     assert_true($input_html);
 
-    ( my $output_yml_file = __FILE__ ) =~ s/ExampleDumpHtmlTreeTest.pm$/output.yml/;
-    my $output_yml = YAML::Tiny->read($output_yml_file);
-    assert_true($output_yml);
+    my $output_yml_data = do {
+        ( my $output_yml_file = __FILE__ ) =~ s/ExampleDumpHtmlTreeTest.pm$/output.yml/;
+        LoadFile($output_yml_file);
+    };
+    assert_true($output_yml_data);
 
     my $handler = HTML::SAX::ExampleDumpHtmlTreeTest::Handler->new;
     my $parser = HTML::SAX->new( rawtext => $input_html, handler => $handler )->parse;
 
-    assert_deep_equals($output_yml->[0], $handler->data);
+    # Redump original YML, because YAML::Tiny outputs different style.
+    my $handler_data_yml = Dump($handler->data);
+    my $output_yml = Dump($output_yml_data);
+    assert_equals('', diff \$output_yml, \$handler_data_yml, { STYLE => "Table" });
 };
 
 

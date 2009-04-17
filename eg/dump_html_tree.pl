@@ -6,7 +6,13 @@ use warnings;
 use lib 'lib', '../lib';
 
 use HTML::SAX;
-use YAML;
+
+BEGIN {
+    eval q{ use YAML::Syck; 1 } or
+    eval q{ use YAML::Tiny; 1 } or
+    eval q{ use YAML; 1 } or
+    die $@;
+};
 
 my $fh;
 
@@ -30,8 +36,6 @@ BEGIN {
     package My::Handler;
     use Moose;
     with 'HTML::SAX::Handler';
-
-    use YAML::Tiny;
 
     has 'data' => ( is => 'rw', default => sub { [] } );
 

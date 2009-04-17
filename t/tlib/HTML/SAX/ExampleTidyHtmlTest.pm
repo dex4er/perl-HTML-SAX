@@ -5,8 +5,8 @@ use Test::Unit::Lite;
 use Moose;
 extends 'Test::Unit::TestCase';
 
+use Text::Diff;
 use Test::Assert ':all';
-use YAML::Tiny;
 
 use HTML::SAX;
 
@@ -30,7 +30,7 @@ sub test_dump_html_tree {
     my $handler = HTML::SAX::ExampleTidyHtmlTest::Handler->new;
     my $parser = HTML::SAX->new( rawtext => $input_html, handler => $handler )->parse;
 
-    assert_equals($output_html, $handler->data);
+    assert_equals('', diff \$output_html, \$handler->data, { STYLE => "Table" });
 };
 
 
@@ -44,7 +44,7 @@ has data  => ( is => 'rw', default => '' );
 sub empty_element {
     my ($self, $tag, %attrs) = @_;
     my $data = $self->data;
-    if ($tag !~ /^(a|abbr|acronym|address|b|br|code|em|i|img|li|span|strong|sup)$/) {
+    if ($tag !~ /^(a|abbr|acronym|address|b|br|code|em|i|img|span|strong|sup)$/) {
         $data .= sprintf "\n%s", ' ' x ($self->level * 2);
     };
     $data .= sprintf "<%s%s />",
@@ -56,7 +56,7 @@ sub empty_element {
 sub start_element {
     my ($self, $tag, %attrs) = @_;
     my $data = $self->data;
-    if ($tag !~ /^(a|abbr|acronym|address|b|br|code|em|i|img|li|span|strong|sup)$/) {
+    if ($tag !~ /^(a|abbr|acronym|address|b|br|code|em|i|img|span|strong|sup)$/) {
         $data .= sprintf "\n%s", ' ' x ($self->level * 2);
     };
     $data .= sprintf "<%s%s>",
@@ -70,7 +70,7 @@ sub end_element {
     my ($self, $tag) = @_;
     my $data = $self->data;
     $self->level( $self->level - 1 );
-    if ($tag =~ /^(body|div|form|head|html|table|td|tr|ul)$/) {
+    if ($tag =~ /^(body|div|form|head|html|table|tr|ul)$/) {
         $data .= sprintf "\n%s", ' ' x ($self->level * 2);
     };
     $data .= sprintf "</%s>", $tag;
@@ -99,6 +99,13 @@ sub comment {
     $data .= sprintf "\n%s", ' ' x ($self->level * 2);
     $data .= sprintf "<!--%s-->", join(' -- ', @string);
     $self->data($data);
+};
+
+sub end_document {
+    my ($self) = @_;
+    my $data = $self->data;
+    $data .= "\n";
+    $self->data($data);  
 };
 
 1;
