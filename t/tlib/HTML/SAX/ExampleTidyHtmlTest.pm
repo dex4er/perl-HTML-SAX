@@ -1,4 +1,4 @@
-package HTML::SAX::ExampleCleanHtmlTest;
+package HTML::SAX::ExampleTidyHtmlTest;
 
 use Test::Unit::Lite;
 
@@ -12,7 +12,7 @@ use HTML::SAX;
 
 sub test_dump_html_tree {
     my $input_html = do {
-        ( my $input_html_file = __FILE__ ) =~ s/ExampleCleanHtmlTest.pm$/input.html/;
+        ( my $input_html_file = __FILE__ ) =~ s/ExampleTidyHtmlTest.pm$/input.html/;
         open my $fh, '<', $input_html_file or die $!;
         local $/;
         <$fh>;
@@ -20,21 +20,21 @@ sub test_dump_html_tree {
     assert_true($input_html);
 
     my $output_html = do {
-        ( my $output_html_file = __FILE__ ) =~ s/ExampleCleanHtmlTest.pm$/output.html/;
+        ( my $output_html_file = __FILE__ ) =~ s/ExampleTidyHtmlTest.pm$/output.html/;
         open my $fh, '<', $output_html_file or die $!;
         local $/;
         <$fh>;
     };
     assert_true($output_html);
 
-    my $handler = HTML::SAX::ExampleCleanHtmlTest::Handler->new;
+    my $handler = HTML::SAX::ExampleTidyHtmlTest::Handler->new;
     my $parser = HTML::SAX->new( rawtext => $input_html, handler => $handler )->parse;
 
     assert_equals($output_html, $handler->data);
 };
 
 
-package HTML::SAX::ExampleCleanHtmlTest::Handler;
+package HTML::SAX::ExampleTidyHtmlTest::Handler;
 use Moose;
 with 'HTML::SAX::Handler';
 
