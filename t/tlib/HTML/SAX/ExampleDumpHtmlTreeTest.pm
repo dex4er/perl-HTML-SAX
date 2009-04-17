@@ -37,6 +37,24 @@ with 'HTML::SAX::Handler';
 has 'data' => ( is => 'rw', default => sub { [] } );
 
 foreach my $method (qw{
+    start_document
+}) {
+    __PACKAGE__->meta->add_method($method => sub {
+        my ($self, $parser, $data) = @_;
+        push @{ $self->data }, { $method => $data };
+    });
+};
+
+foreach my $method (qw{
+    end_document
+}) {
+    __PACKAGE__->meta->add_method($method => sub {
+        my ($self) = @_;
+        push @{ $self->data }, { $method => undef };
+    });
+};
+
+foreach my $method (qw{
     start_element
     empty_element
 }) {
