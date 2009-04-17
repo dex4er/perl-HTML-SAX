@@ -63,7 +63,7 @@ use 5.006;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.01_01';
 
 use Moose;
 
@@ -389,11 +389,11 @@ sub parse {
 
 L<Moose>.
 
+=for readme continue
+
 =head1 BUGS
 
 The API is not stable yet and can be changed in future.
-
-=for readme continue
 
 =head1 AUTHOR
 
