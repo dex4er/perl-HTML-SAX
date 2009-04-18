@@ -20,4 +20,21 @@ sub test_empty {
     $parser->parse;
 };
 
+sub test_simpledata {
+    my ($self) = @_;
+    $self->handler->mock_expect_once('characters', args => ['content']);
+    my $parser = HTML::SAX->new( handler => $self->handler, rawtext => 'content' );
+    assert_isa('HTML::SAX', $parser);
+    $parser->parse;
+};
+
+sub test_preserving_white_space {
+return;
+    my ($self) = @_;
+    $self->handler->mock_expect_once('characters', args => [" content\t\r\n "]);
+    my $parser = HTML::SAX->new( handler => $self->handler, rawtext => " content\t\r\n " );
+    assert_isa('HTML::SAX', $parser);
+    $parser->parse;
+};
+
 1;
