@@ -29,7 +29,6 @@ sub test_simpledata {
 };
 
 sub test_preserving_white_space {
-return;
     my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => [" content\t\r\n "]);
     my $parser = HTML::SAX->new( handler => $self->handler, rawtext => " content\t\r\n " );
