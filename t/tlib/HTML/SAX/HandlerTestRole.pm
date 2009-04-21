@@ -4,6 +4,7 @@ use Moose::Role;
 
 use Test::Assert ':all';
 use Test::Mock::Class ':all';
+use Exception::Base 'Exception::Fatal';
 
 use HTML::SAX;
 
@@ -17,6 +18,12 @@ has 'handler' => (
     is      => 'rw',
     does    => 'HTML::SAX::Handler',
     clearer => 'clear_handler'
+);
+
+has 'parser' => (
+    is      => 'rw',
+    isa     => 'HTML::SAX',
+    clearer => 'clear_parser',
 );
 
 around 'set_up' => sub {
@@ -35,12 +42,19 @@ around 'set_up' => sub {
 around 'tear_down' => sub {
     my ($next, $self) = @_;
 
-    $self->handler->mock_tally;
+    eval {
+        assert_isa('HTML::SAX', $self->parser);
+        $self->parser->parse;
+        $self->handler->mock_tally;
+    };
+    my $e = Exception::Fatal->catch;
 
     $self->clear_handler;
     $self->clear_metamock;
 
-    return $self->$next();
+    my $return = $self->$next();
+
+    $e->throw if $e;
 };
 
 1;

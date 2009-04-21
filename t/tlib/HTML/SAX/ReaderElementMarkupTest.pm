@@ -13,24 +13,20 @@ use HTML::SAX;
 sub test_preserving_white_space {
     my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => [" content\t\r\n "]);
-    my $parser = HTML::SAX->new(
+    $self->parser( HTML::SAX->new(
         handler => $self->handler,
         rawtext => " content\t\r\n ",
-    );
-    assert_isa('HTML::SAX', $parser);
-    $parser->parse;
+    ) );
 };
 
 sub test_empty_element {
     my ($self) = @_;
     $self->handler->mock_expect_once('start_element', args => ['tag']);
     $self->handler->mock_expect_once('end_element', args => ['tag']);
-    my $parser = HTML::SAX->new(
+    $self->parser( HTML::SAX->new(
         handler => $self->handler,
         rawtext => '<tag></tag>',
-    );
-    assert_isa('HTML::SAX', $parser);
-    $parser->parse;
+    ) );
 };
 
 sub test_element_with_content {
@@ -38,36 +34,30 @@ sub test_element_with_content {
     $self->handler->mock_expect_once('start_element', args => ['tag']);
     $self->handler->mock_expect_once('characters', args => ['content']);
     $self->handler->mock_expect_once('end_element', args => ['tag']);
-    my $parser = HTML::SAX->new(
+    $self->parser( HTML::SAX->new(
         handler => $self->handler,
         rawtext => '<tag>content</tag>',
-    );
-    assert_isa('HTML::SAX', $parser);
-    $parser->parse;
+    ) );
 };
 
 sub test_start_element_with_pre_content {
     my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ['content']);
     $self->handler->mock_expect_once('start_element', args => ['br']);
-    my $parser = HTML::SAX->new(
+    $self->parser( HTML::SAX->new(
         handler => $self->handler,
         rawtext => 'content<br>',
-    );
-    assert_isa('HTML::SAX', $parser);
-    $parser->parse;
+    ) );
 };
 
 sub test_start_element_with_post_content {
     my ($self) = @_;
     $self->handler->mock_expect_once('start_element', args => ['br']);
     $self->handler->mock_expect_once('characters', args => ['content']);
-    my $parser = HTML::SAX->new(
+    $self->parser( HTML::SAX->new(
         handler => $self->handler,
         rawtext => '<br>content',
-    );
-    assert_isa('HTML::SAX', $parser);
-    $parser->parse;
+    ) );
 };
 
 sub test_mismatched_elements {
@@ -79,64 +69,91 @@ sub test_mismatched_elements {
     $self->handler->mock_expect_call_count('start_element', 2);
     $self->handler->mock_expect_call_count('end_element', 2);
     $self->handler->mock_expect_once('characters', args => ['content']);
-    my $parser = HTML::SAX->new(
+    $self->parser( HTML::SAX->new(
         handler => $self->handler,
         rawtext => '<b><i>content</b></i>',
-    );
-    assert_isa('HTML::SAX', $parser);
-    $parser->parse;
-#    use YAML;die Dump $self->handler;
+    ) );
+};
+
+sub test_end_element {
+    my ($self) = @_;
+    $self->handler->mock_expect_once('end_element', args => ['tag']);
+    $self->handler->mock_expect_never('characters');
+    $self->parser( HTML::SAX->new(
+        handler => $self->handler,
+        rawtext => '</tag>',
+    ) );
+};
+
+sub test_end_element_with_pre_content {
+    my ($self) = @_;
+    $self->handler->mock_expect_once('characters', args => ['a']);
+    $self->handler->mock_expect_once('end_element', args => ['tag']);
+    $self->parser( HTML::SAX->new(
+        handler => $self->handler,
+        rawtext => 'a</tag>',
+    ) );
+};
+
+sub test_end_element_with_post_content {
+    my ($self) = @_;
+    $self->handler->mock_expect_once('end_element', args => ['tag']);
+    $self->handler->mock_expect_once('characters', args => ['a']);
+    $self->parser( HTML::SAX->new(
+        handler => $self->handler,
+        rawtext => '</tag>a',
+    ) );
+};
+
+sub test_end_element_with_space {
+    my ($self) = @_;
+    $self->handler->mock_expect_once('end_element', args => ['tag']);
+    $self->handler->mock_expect_never('characters');
+    $self->parser( HTML::SAX->new(
+        handler => $self->handler,
+        rawtext => '</tag >',
+    ) );
+};
+
+sub test_empty_element_self_close {
+    my ($self) = @_;
+    $self->handler->mock_expect_once('empty_element', args => ['br']);
+    $self->handler->mock_expect_never('start_element');
+    $self->handler->mock_expect_never('end_element');
+    $self->handler->mock_expect_never('characters');
+    $self->parser( HTML::SAX->new(
+        handler => $self->handler,
+        rawtext => '<br/>',
+    ) );
+};
+
+sub test_empty_element_self_close_with_space {
+    my ($self) = @_;
+    $self->handler->mock_expect_once('empty_element', args => ['br']);
+    $self->handler->mock_expect_never('start_element');
+    $self->handler->mock_expect_never('end_element');
+    $self->handler->mock_expect_never('characters');
+    $self->parser( HTML::SAX->new(
+        handler => $self->handler,
+        rawtext => '<br/ >',
+    ) );
+};
+
+sub test_element_nested_single_quote {
+    my ($self) = @_;
+    $self->handler->mock_expect_once('start_element', args => ['tag', 'attribute', "'"] );
+    $self->handler->mock_expect_never('characters');
+    $self->handler->mock_expect_never('end_element');
+    $self->parser( HTML::SAX->new(
+        handler => $self->handler,
+        rawtext => '<tag attribute="\'">',
+    ) );
+    $self->parser->parse;
 };
 
 1;__END__
-sub testend_element {
-    $self->handler->mock_expect_once('end_element', args => ('tag'));
-    $self->handler->mock_expect_never('characters');
-    $self->parser->parse('</tag>');
-};
-
-sub testend_element_withPre_content {
-    $self->handler->mock_expect_once('characters', args => ('a'));
-    $self->handler->mock_expect_once('end_element', args => ('tag'));
-    $self->parser->parse('a</tag>');
-};
-
-sub testend_element_with_post_content {
-    $self->handler->mock_expect_once('end_element', args => ('tag'));
-    $self->handler->mock_expect_once('characters', args => ('a'));
-    $self->parser->parse('</tag>a');
-};
-
-sub testend_element_withSpace {
-    $self->handler->mock_expect_once('end_element', args => ('tag'));
-    $self->handler->mock_expect_never('characters');
-    $self->parser->parse('</tag >');
-};
-
-sub testEmptyElementSelfClose {
-    $self->handler->mock_expect_once('emptyElement', args => ['br']);
-    $self->handler->mock_expect_never('start_element');
-    $self->handler->mock_expect_never('end_element');
-    $self->handler->mock_expect_never('characters');
-    $self->parser->parse('<br/>');
-};
-
-sub testEmptyElementSelfClose_withSpace {
-    $self->handler->mock_expect_once('emptyElement', args => ['br']);
-    $self->handler->mock_expect_never('start_element');
-    $self->handler->mock_expect_never('end_element');
-    $self->handler->mock_expect_never('characters');
-    $self->parser->parse('<br />');
-};
-
-sub testElementNestedSingleQuote {
-    $self->handler->mock_expect_once('start_element', args => ('tag', args => ('attribute' => '\'')));
-    $self->handler->mock_expect_never('characters');
-    $self->handler->mock_expect_never('end_element');
-    $self->parser->parse('<tag attribute="\'">');
-};
-
-sub testElementNestedDoubleQuote {
+sub test_element_nestedDouble_quote {
+    my ($self) = @_;
     $self->handler->mock_expect_once('start_element', args => ('tag', args => ('attribute' => '"')));
     $self->handler->mock_expect_never('characters');
     $self->handler->mock_expect_never('end_element');
@@ -144,6 +161,7 @@ sub testElementNestedDoubleQuote {
 };
 
 sub testAttributes {
+    my ($self) = @_;
     $self->handler->mock_expect_once(
             'start_element',
             args => ('tag', args => ("a" => "A", "b" => "B", "c" => "C")));
@@ -151,7 +169,8 @@ sub testAttributes {
     $self->parser->parse('<tag a="A" b=\'B\' c = "C">');
 };
 
-sub testEmptyAttributes {
+sub test_emptyAttributes {
+    my ($self) = @_;
     $self->handler->mock_expect_once(
             'start_element',
             args => ('tag', args => ("a" => NULL, "b" => NULL, "c" => NULL)));
@@ -160,6 +179,7 @@ sub testEmptyAttributes {
 };
 
 sub testNastyAttributes {
+    my ($self) = @_;
     $self->handler->mock_expect_once(
             'start_element',
             args => ('tag', args => ("a" => "&%$'?<>", "b" => "\r\n\t\"", "c" => "")));
@@ -168,6 +188,7 @@ sub testNastyAttributes {
 };
 
 sub testAttributesPadding {
+    my ($self) = @_;
     $self->handler->mock_expect_once(
             'start_element',
             args => ('tag', args => ("a" => "A", "b" => "B", "c" => "C")));
@@ -176,108 +197,126 @@ sub testAttributesPadding {
 };
 
 sub testTruncatedOpen {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<'));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<');
 };
 
-sub testTruncatedEmptyClose {
+sub testTruncated_emptyClose {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content</'));
     $self->handler->mock_expect_never('end_element');
     $self->parser->parse('content</');
 };
 
 sub testTruncatedClose {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content</a'));
     $self->parser->parse('content</a');
     $self->handler->mock_expect_never('end_element');
 };
 
-sub testTruncatedOpenElementChar {
+sub testTruncatedOpen_elementChar {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<a'));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<a');
 };
 
-sub testTruncatedOpenElement {
+sub testTruncatedOpen_element {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<tag'));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<tag');
 };
 
-sub testTruncatedOpenElementSpace {
+sub testTruncatedOpen_elementSpace {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<tag '));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<tag ');
 };
 
-sub testTruncatedOpenElementMinimizedAttribute {
+sub testTruncatedOpen_elementMinimizedAttribute {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<tag attribute'));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<tag attribute');
 };
 
-sub testTruncatedOpenElementMinimizedAttributeSpace {
+sub testTruncatedOpen_elementMinimizedAttributeSpace {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<tag attribute '));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<tag attribute ');
 };
 
-sub testTruncatedOpenElementAttribute {
+sub testTruncatedOpen_elementAttribute {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<tag attribute='));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<tag attribute=');
 };
 
-sub testTruncatedOpenElementAttributeSpace {
+sub testTruncatedOpen_elementAttributeSpace {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<tag attribute= '));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<tag attribute= ');
 };
 
-sub testTruncatedOpenElementAttributeNoQuote {
+sub testTruncatedOpen_elementAttributeNo_quote {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<tag attribute=value'));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<tag attribute=value');
 };
 
-sub testTruncatedOpenElementAttributeDoubleQuote {
+sub testTruncatedOpen_elementAttributeDouble_quote {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<tag attribute="'));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<tag attribute="');
 };
 
-sub testTruncatedOpenElementAttributeDoubleQuoteNoClose {
+sub testTruncatedOpen_elementAttributeDouble_quoteNoClose {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<tag attribute="value'));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<tag attribute="value');
 };
 
-sub testTruncatedOpenElementAttributeDoubleQuoteValue {
+sub testTruncatedOpen_elementAttributeDouble_quoteValue {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<tag attribute="value"'));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<tag attribute="value"');
 };
 
-sub testTruncatedOpenElementAttributeSingleQuote {
+sub testTruncatedOpen_elementAttribute_single_quote {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<tag attribute=\''));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<tag attribute=\'');
 };
 
-sub testTruncatedOpenElementAttributeSingleQuoteNoClose {
+sub testTruncatedOpen_elementAttribute_single_quoteNoClose {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<tag attribute=\'value'));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<tag attribute=\'value');
 };
 
-sub testTruncatedOpenElementAttributeSingleQuoteValue {
+sub testTruncatedOpen_elementAttribute_single_quoteValue {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<tag attribute=\'value\''));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<tag attribute=\'value\'');
 };
 
-sub testTruncatedOpenElementClose {
+sub testTruncatedOpen_elementClose {
+    my ($self) = @_;
     $self->handler->mock_expect_once('characters', args => ('content<tag attribute=\'value\'/'));
     $self->handler->mock_expect_never('start_element');
     $self->parser->parse('content<tag attribute=\'value\'/');
