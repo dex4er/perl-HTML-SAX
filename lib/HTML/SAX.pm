@@ -268,8 +268,8 @@ sub parse {
 
     my $markup_start_pattern = qr/(<\/|<!|<[$name_start_char])/;
     my $end_element_pattern = qr/\G($name_pattern)\s*>/;
-    my $start_element_pattern = qr/\G($name_pattern)(?=\s|>|\/>)/;
-    my $start_element_end_pattern = qr/\G\s*(\/)?>/;
+    my $start_element_pattern = qr/\G($name_pattern)(?=\s|>|\/\s*>)/;
+    my $start_element_end_pattern = qr/\G\s*(\/)?\s*>/;
     my $attribute_pattern = qr/\G\s*($name_pattern)(\s*=\s*("|\'|)(.*?)\3){0,1}(?=\s|\/>|>)/s;
     my $comment_pattern = qr/\G--(.*?)--\s*/s;
     my $comment_decl_end_pattern = qr/\G>/;
