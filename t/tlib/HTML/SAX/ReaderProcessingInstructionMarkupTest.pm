@@ -90,7 +90,7 @@ sub test_truncated_processing_instruction_no_close {
 };
 
 # The XML declarations are passed as characters() call
-# Should be another way? 
+# Should be another way?
 
 sub test_xml_decl {
     my ($self) = @_;
