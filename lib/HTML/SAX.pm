@@ -330,13 +330,13 @@ sub parse {
                 redo unless $rawtext =~ /$start_element_pattern/;
 
                 my $tag = $1;
-                my %attributes = ();
+                my @attributes = ();
                 $self->_set_position( $LAST_MATCH_END[0] );
 
                 pos($rawtext) = $self->_get_position;
                 while ($rawtext =~ /$attribute_pattern/gc) {
                     my ($name, $value) = ($1, $4);
-                    $attributes{$name} = $value;
+                    push @attributes, $name => $value;
 #                    $self->_set_position( $LAST_MATCH_END[0] );
                 };
 
@@ -346,9 +346,9 @@ sub parse {
                 $self->_set_position( $LAST_MATCH_END[0] );
                 $self->emit_characters;
                 if (defined $1) {
-                    $self->_get_handler->empty_element($tag, %attributes);
+                    $self->_get_handler->empty_element($tag, @attributes);
                 } else {
-                    $self->_get_handler->start_element($tag, %attributes);
+                    $self->_get_handler->start_element($tag, @attributes);
                 };
 
                 # see http://www.w3.org/TR/REC-html40/appendix/notes.html#notes-specifying-data
