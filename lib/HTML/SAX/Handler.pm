@@ -45,7 +45,7 @@ use Moose::Role;
 
 =over
 
-=item start_document(I<locator> : HTML::SAX::Locator, I<encoding> : Str)
+=item start_document( I<locator> : HTML::SAX::Locator, I<encoding> : Str )
 
 Called on start of parsing.
 
@@ -63,7 +63,7 @@ Called on end of parsing.
 sub end_document { };
 
 
-=item characters(I<data> : Str);
+=item characters( I<data> : Str );
 
 Called if some text was found.
 
@@ -72,7 +72,7 @@ Called if some text was found.
 sub characters { };
 
 
-=item start_element(I<name> : Str, I<attrs> : HashRef[Str])
+=item start_element( I<name> : Str, I<attrs> : Hash[Str] )
 
 Called if empty element was found.
 
@@ -85,7 +85,7 @@ Examples:
 sub start_element { };
 
 
-=item end_element(I<name> : Str)
+=item end_element( I<name> : Str )
 
 Called if end element was found.
 
@@ -98,7 +98,7 @@ Examples:
 sub end_element { };
 
 
-=item empty_element(I<name> : Str, I<attrs> : HashRef[Str])
+=item empty_element( I<name> : Str, I<attrs> : Hash[Str] )
 
 Called if empty element was found.
 
@@ -111,7 +111,7 @@ Examples:
 sub empty_element { };
 
 
-=item cdata(I<data> : Str)
+=item cdata( I<data> : Str )
 
 Called if CDATA was found.
 
@@ -124,7 +124,7 @@ Examples:
 sub cdata { };
 
 
-=item comment(I<data> : Str|ArrayRef[Str])
+=item comment( I<data> : Array[Str] )
 
 Called if comment was found.
 
@@ -132,33 +132,32 @@ Examples:
 
     <!-- This is comment -->
 
+=back
+
 =cut
 
 sub comment { };
 
 
-
 1;
 
-
-=back
 
 =begin umlwiki
 
 = Class Diagram =
 
-[                       <<role>>
-                    HTML::SAX::Handler
- ------------------------------------------------------------
- start_document(locator : HTML::SAX::Locator, encoding : Str)
- end_document()
- characters(data : Str);
- start_element(name : Str, attrs : HashRef[Str])
- end_element(name : Str)
- empty_element(name : Str, attrs : HashRef[Str])
- cdata(data : Str)
- comment(data : Str|ArrayRef[Str])
-                                                              ]
+[                         <<role>>
+                      HTML::SAX::Handler
+ ---------------------------------------------------------------
+ +start_document( locator : HTML::SAX::Locator, encoding : Str )
+ +end_document()
+ +characters( data : Str );
+ +start_element( name : Str, attrs : Hash[Str] )
+ +end_element( name : Str )
+ +empty_element( name : Str, attrs : Hash[Str] )
+ +cdata( data : Str )
+ +comment( data : Array[Str] )
+                                                                 ]
 
 =end umlwiki
 
@@ -180,7 +179,7 @@ Piotr Roszatycki <dexter@cpan.org>
 
 Copyright (c) 2006 Jeff Moore
 
-Copyright (c) 2008, 2009 Piotr Roszatycki E<lt>dexter@cpan.orgE<gt>.
+Copyright (c) 2009 Piotr Roszatycki E<lt>dexter@cpan.orgE<gt>.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -28,33 +28,63 @@ our $VERSION = '0.01_01';
 use Moose::Role;
 
 
-#requires qw{
-#    get_public_id
-#    get_line_number
-#    get_column_number
-#    get_character_offset
-#    get_raw_event_string
-#};
+=head1 REQUIRES
+
+=over
+
+=item get_public_id(I<>) : Str
+
+Gets an identifier for this document.
+
+=cut
+
+requires 'get_public_id';
+
+
+=item get_line_number(I<>) : Int
+
+Gets a current line number.
+
+=cut
+
+requires 'get_line_number';
+
+
+=item get_character_offset(I<>) : Int
+
+Gets a current position of parsed rawtext.
+
+=cut
+
+requires 'get_character_offset';
+
+
+=item get_raw_event_string(I<>) : Str
+
+Gets a current character event string.
+
+=back
+
+=cut
+
+requires 'get_raw_event_string';
 
 
 1;
 
 
-=back
-
 =begin umlwiki
 
 = Class Diagram =
 
-[       <<role>>
-   HTML::SAX::Locator
- ----------------------
- get_public_id()
- get_line_number()
- get_column_number()
- get_character_offset()
- get_raw_event_string()
-                       ]
+[             <<role>>
+          HTML::SAX::Locator
+ ------------------------------------
+ <<requires>> +get_public_id()
+ <<requires>> +get_line_number()
+ <<requires>> +get_character_offset()
+ <<requires>> +get_raw_event_string()
+                                     ]
 
 =end umlwiki
 
@@ -76,7 +106,7 @@ Piotr Roszatycki <dexter@cpan.org>
 
 Copyright (c) 2006 Jeff Moore
 
-Copyright (c) 2008, 2009 Piotr Roszatycki E<lt>dexter@cpan.orgE<gt>.
+Copyright (c) 2009 Piotr Roszatycki E<lt>dexter@cpan.orgE<gt>.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

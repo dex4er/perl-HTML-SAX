@@ -77,7 +77,7 @@ use English '-no_match_vars';
 
 =over
 
-=item public_id
+=item public_id : Str
 
 An identifier for this document
 
@@ -159,6 +159,8 @@ has '_markup_start' => (
 
 Length of the document in characters
 
+=back
+
 =cut
 
 has '_length' => (
@@ -169,11 +171,6 @@ has '_length' => (
 );
 
 
-=back
-
-=cut
-
-
 use namespace::clean -except => 'meta';
 
 
@@ -181,7 +178,20 @@ use namespace::clean -except => 'meta';
 
 =over
 
-=item get_line_number() : Int
+=item get_public_id(I<>) : Str
+
+Gets an identifier for this document.
+
+=cut
+
+sub get_public_id {
+    my ($self) = @_;
+    return $self->_get_public_id;
+};
+
+=item get_line_number(I<>) : Int
+
+Gets a current line number.
 
 =cut
 
@@ -191,20 +201,9 @@ sub get_line_number {
 };
 
 
-=item get_column_number() : Int
+=item get_character_offset(I<>) : Int
 
-Calculates the column number from the byte index
-
-=cut
-
-sub get_column_number {
-    # Not implemented yet.
-};
-
-
-=item get_character_offset() : Int
-
-Emit characters event
+Gets a current position of parsed rawtext.
 
 =cut
 
@@ -214,9 +213,9 @@ sub get_character_offset {
 };
 
 
-=item get_raw_event_string() : Str
+=item get_raw_event_string(I<>) : Str
 
-TODO
+Gets a current character event string.
 
 =cut
 
@@ -224,10 +223,10 @@ sub get_raw_event_string {
     my ($self) = @_;
     return substr($self->_get_rawtext, $self->_get_markup_start,
                   $self->_get_position - $self->_get_markup_start);
-}
+};
 
 
-=item emit_characters() : Int
+=item emit_characters(I<>) : Int
 
 Emit characters event
 
@@ -242,18 +241,18 @@ sub emit_characters {
         );
     }
     $self->_set_char_start($self->_get_position);
-}
+};
 
 
-=item parse(I<data> : Str, I<public_id> : Str = undef)
+=item parse( I<data> : Str, I<public_id> : Str = undef )
 
 Begins the parsing operation, setting up any decorators, depending on parse
 options invoking _parse() to execute parsing.  I<data> is a XML document to
 parse.
 
-=cut
+=back
 
-use Smart::Comments;
+=cut
 
 sub parse {
     my $self = shift;
@@ -367,19 +366,31 @@ sub parse {
 };
 
 
-=back
-
-=cut
-
-
 1;
 
-
-=back
 
 =begin umlwiki
 
 = Class Diagram =
+
+[                 HTML::SAX
+ ---------------------------------------------
+ +public_id : Str
+ +handler : HTML::SAX::Handler
+ +rawtext : Str
+ #_position : Int
+ #_char_start : Int
+ #_markup_start : Int
+ #_length : Int
+ ---------------------------------------------
+ +get_public_id() : Str
+ +get_line_number() : Int
+ +get_character_offset() : Int
+ +get_raw_event_string() : Str
+ +emit_characters() : Int
+ +parse( data : Str, public_id : Str = undef )
+                                              ]
+
 
 [HTML::SAX] ---|> <<role>> [HTML::SAX::Locator]
 
@@ -403,7 +414,7 @@ Piotr Roszatycki <dexter@cpan.org>
 
 Copyright (c) 2006 Jeff Moore
 
-Copyright (c) 2008, 2009 Piotr Roszatycki <dexter@cpan.org>.
+Copyright (c) 2009 Piotr Roszatycki <dexter@cpan.org>.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
