@@ -65,7 +65,7 @@ use warnings;
 
 our $VERSION = '0.01_01';
 
-use Moose;
+use Any::Moose;
 
 with 'HTML::SAX::Locator';
 

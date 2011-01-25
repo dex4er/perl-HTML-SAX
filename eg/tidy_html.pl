@@ -25,7 +25,7 @@ my $parser = HTML::SAX->new( rawtext => $data, handler => $handler )->parse;
 
 BEGIN {
     package My::Handler;
-    use Moose;
+    use Any::Moose;
     with 'HTML::SAX::Handler';
 
     has level => ( is => 'rw', isa => 'Num', default => 0 );

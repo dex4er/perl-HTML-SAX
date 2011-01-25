@@ -12,4 +12,16 @@ use Exception::Warning '%SIG' => 'die', verbosity => 4;
 use Exception::Died '%SIG', verbosity => 4;
 use Exception::Assertion verbosity => 4;
 
-Test::Unit::HarnessUnit->new->start('Test::Unit::Lite::AllTests');
+$ENV{ANY_MOOSE} = 'Moose';
+
+local $SIG{__WARN__} = sub { require Carp; Carp::confess(@_) };
+
+eval {
+    require Moose;
+};
+if ($@) {
+    print "1..0 # SKIP Moose required\n";
+}
+else {
+    Test::Unit::HarnessUnit->new->start('Test::Unit::Lite::AllTests');
+};

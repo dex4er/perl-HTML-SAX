@@ -38,7 +38,7 @@ use warnings;
 
 our $VERSION = '0.01_01';
 
-use Moose::Role;
+use Any::Moose 'Role';
 
 
 =head1 METHODS

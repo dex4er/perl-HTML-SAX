@@ -34,7 +34,7 @@ print Dump($handler->data);
 
 BEGIN {
     package My::Handler;
-    use Moose;
+    use Any::Moose;
     with 'HTML::SAX::Handler';
 
     has 'data' => ( is => 'rw', default => sub { [] } );

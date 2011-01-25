@@ -16,12 +16,13 @@ my $build = Module::Build->new(
     license => 'mit',
     requires => {
         'perl'               => 5.006,
-        'Moose'              => 0.56,
+        'Any::Moose'         => 0,
     },
     optional => {
     },
     build_requires => {
         'parent'             => 0,
+        'Mouse::Foreign'     => 0,
         'Test::Unit::Lite'   => 0.12,
         'Test::Assert'       => 0,
         'Test::Mock::Class'  => 0.02,

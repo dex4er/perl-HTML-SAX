@@ -2,7 +2,8 @@ package HTML::SAX::ExampleTidyHtmlTest;
 
 use Test::Unit::Lite;
 
-use Moose;
+use Any::Moose;
+use if Any::Moose::mouse_is_preferred, 'MouseX::Foreign';
 extends 'Test::Unit::TestCase';
 
 use Text::Diff;
@@ -35,7 +36,7 @@ sub test_dump_html_tree {
 
 
 package HTML::SAX::ExampleTidyHtmlTest::Handler;
-use Moose;
+use Any::Moose;
 with 'HTML::SAX::Handler';
 
 has level => ( is => 'rw', isa => 'Num', default => 0 );

@@ -1,6 +1,6 @@
 package HTML::SAX::HandlerTestRole;
 
-use Moose::Role;
+use Any::Moose 'Role';
 
 use Test::Assert ':all';
 use Test::Mock::Class ':all';
