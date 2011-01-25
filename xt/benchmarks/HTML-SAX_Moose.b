@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 
+use lib 'lib', '../../lib';
+
+BEGIN { $ENV{ANY_MOOSE} = 'Moose' };
+
 use Benchmark ':all';
 
 open my $fh, 'www.cpan.org.html';
@@ -10,7 +14,7 @@ use HTML::SAX;
 
 BEGIN {
     package My::Handler;
-    use Moose;
+    use Any::Moose;
     with 'HTML::SAX::Handler';
     __PACKAGE__->meta->make_immutable;
 };
