@@ -179,7 +179,7 @@ Piotr Roszatycki <dexter@cpan.org>
 
 Copyright (c) 2006 Jeff Moore
 
-Copyright (c) 2009 Piotr Roszatycki E<lt>dexter@cpan.orgE<gt>.
+Copyright (c) 2009, 2011 Piotr Roszatycki E<lt>dexter@cpan.orgE<gt>.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
