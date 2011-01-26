@@ -26,7 +26,7 @@ my $build = Module::Build->new(
         'Test::Unit::Lite'     => 0.12,
         'Test::Assert'         => 0,
         'Test::Mock::Class'    => 0.02,
-        'YAML'                 => 0,
+        'YAML::Tiny'           => 0,
     },
     auto_configure_requires => 0,
     create_makefile_pl => 'traditional',

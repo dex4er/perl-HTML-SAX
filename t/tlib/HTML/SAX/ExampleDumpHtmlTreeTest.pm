@@ -6,7 +6,7 @@ use base 'Test::Unit::TestCase';
 
 use Text::Diff;
 use Test::Assert ':all';
-use YAML 'Dump', 'LoadFile';
+use YAML::Tiny 'Dump', 'LoadFile';
 
 use HTML::SAX;
 
