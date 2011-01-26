@@ -22,7 +22,6 @@ my $build = Module::Build->new(
     },
     build_requires => {
         'parent'             => 0,
-        'Mouse::Foreign'     => 0,
         'Test::Unit::Lite'   => 0.12,
         'Test::Assert'       => 0,
         'Test::Mock::Class'  => 0.02,

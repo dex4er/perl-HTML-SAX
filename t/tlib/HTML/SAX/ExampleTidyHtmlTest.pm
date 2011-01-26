@@ -2,9 +2,7 @@ package HTML::SAX::ExampleTidyHtmlTest;
 
 use Test::Unit::Lite;
 
-use Any::Moose;
-use if Any::Moose::mouse_is_preferred, 'MouseX::Foreign';
-extends 'Test::Unit::TestCase';
+use base 'Test::Unit::TestCase';
 
 use Text::Diff;
 use Test::Assert ':all';

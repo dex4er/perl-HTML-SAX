@@ -1,10 +1,10 @@
 package HTML::SAX::ReaderCommentTest;
 
 use Test::Unit::Lite;
-use Any::Moose;
-use if Any::Moose::mouse_is_preferred, 'MouseX::Foreign';
-extends 'Test::Unit::TestCase';
 
+use Any::Moose;
+
+use base 'Test::Unit::TestCase';
 with 'HTML::SAX::HandlerTestRole';
 
 use Test::Assert ':all';
