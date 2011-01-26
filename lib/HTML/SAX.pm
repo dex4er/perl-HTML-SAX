@@ -171,7 +171,7 @@ has '_length' => (
 );
 
 
-use namespace::clean -except => 'meta';
+use namespace::functions -except => 'meta';
 
 
 =head1 METHODS
@@ -365,6 +365,8 @@ sub parse {
     $self->_get_handler->end_document;
 };
 
+
+no namespace::functions;
 
 1;
 

@@ -40,6 +40,8 @@ our $VERSION = '0.01_01';
 
 use Any::Moose 'Role';
 
+use namespace::functions -except => 'meta';
+
 
 =head1 METHODS
 
@@ -138,6 +140,8 @@ Examples:
 
 sub comment { };
 
+
+no namespace::functions;
 
 1;
 

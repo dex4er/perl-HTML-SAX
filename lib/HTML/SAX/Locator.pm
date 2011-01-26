@@ -70,6 +70,10 @@ Gets a current character event string.
 requires 'get_raw_event_string';
 
 
+use namespace::functions -except => 'meta';
+
+no namespace::functions;
+
 1;
 
 
